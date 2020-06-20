@@ -1,0 +1,25 @@
+class Solution(object):
+    def sortColors(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: None Do not return anything, modify nums in-place instead.
+        """
+        repeats = [0, 0, 0]
+        for i in range(len(nums)):
+            number = nums[i]    
+            repeats[number] += 1
+        for i in range(len(nums)):
+            if i < repeats[0]:
+                nums[i] = 0
+            elif i < repeats[0]+repeats[1]:
+                nums[i] = 1
+            else:
+                nums[i] = 2
+                
+        
+        #zero_one_two = 0
+        #current_ind = 0
+        
+        #while current_ind < len(nums):
+            #if nums[current_ind] <= zero_one_two
+        
