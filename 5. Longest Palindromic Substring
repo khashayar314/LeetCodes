@@ -1,0 +1,29 @@
+class Solution(object):
+    def longestPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        
+        longest = 1
+        start = 0
+        for center in range( 0 , len( s ) - 1 ):
+            if s[ center ] == s[ center + 1 ]:
+                
+                i = 1
+                while i <= center and i + center + 1 < len( s ) and s[ center - i ] == s[ center + i + 1 ]:
+                    i += 1
+                if 2 * i > longest:
+                    longest = 2 * i 
+                    start = center - i + 1
+            j = 1
+            while j <= center and j + center < len( s ) and s[ center - j ] == s[ center + j ]:
+                j += 1
+            if 2 * j - 1 > longest:                
+                longest = 2 * j - 1
+                start = center - j + 1
+        return s[ start : start + longest ]
+                
+        
+        
+    
