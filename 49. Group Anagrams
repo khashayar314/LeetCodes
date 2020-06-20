@@ -1,0 +1,44 @@
+class Solution(object):
+    def groupAnagrams(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: List[List[str]]
+        """
+        maindict = {}
+        for string in strs:
+            new = Solution.orgchars(self, string)
+            if new in maindict:
+                maindict[new].append(string)
+            else:
+                maindict[new] = [string]
+        answer = []
+        i = 0
+        for term in maindict:
+            answer.append([])
+            for string in maindict[term]:
+                answer[i].append(string)
+            i += 1
+        return answer
+        
+        
+        
+    def orgchars(self, string):
+        answer = ''
+        mydict = Solution.makedict(self, string)
+        for i in range(ord('a'), ord('z')+1):
+            if chr(i) in mydict:
+                for j in range(mydict[chr(i)]):
+                    answer += chr(i)
+        return answer
+        
+        
+                
+    def makedict(self, str):
+        answer = {}
+        for char in str:
+            if char in answer:
+                answer[char] += 1
+            else:
+                answer[char] = 1
+        return answer
+        
