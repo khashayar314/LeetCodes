@@ -1,0 +1,127 @@
+class Node():
+    def __init__(self, val, key):
+        self.val = val
+        self.key = key
+        self.Prev = None
+        self.Next = None
+
+class LRUCache(object):
+
+    def __init__(self, capacity):
+        """
+        :type capacity: int
+        """
+        self.capacity = capacity
+        self.dict = {}
+        self.length = 0
+        self.first = None
+        self.last = None
+        #self.least = None
+        #self.counter = 0
+
+    def get(self, key):
+        """
+        :type key: int
+        :rtype: int
+        """
+        if key in self.dict:
+            [answer, node] = self.dict[key]
+            if node.Prev == None:
+                if node.Next != None:
+                    self.first = node.Next    
+                    self.first.Prev = None
+                    node.Prev = self.last
+                    node.Next = None
+                    self.last.Next = node
+                    self.last = node
+            else:
+                if node.Next != None:
+                    node.Prev.Next = node.Next
+                    node.Next.Prev = node.Prev
+                    node.Next = None
+                    node.Prev = self.last
+                    self.last.Next = node
+                    self.last = node
+        else:
+            answer = -1
+        return answer
+        
+
+    def put(self, key, value):
+    #def fuck(self, key, value):
+        """
+        :type key: int
+        :type value: int
+        :rtype: None
+        """
+        #self.counter += 1
+        if self.length == 0:
+            self.first = Node(value, key) 
+            self.last = self.first
+            self.dict[key] = [value, self.first]#, self.counter]
+            self.length += 1
+        else:
+            if key in self.dict:
+                temp_node = self.dict[key][1]                
+                if temp_node.Prev == None:
+                    if temp_node.Next == None:
+                        self.first = Node(value, key)
+                        self.last = self.first
+                        self.dict[key] = [value, self.first]#, self.counter]
+                        #self.least = self.first
+                    else:
+                        self.first = temp_node.Next
+                        self.first.Prev = None
+                        new_node = Node(value, key)
+                        self.last.Next = new_node
+                        new_node.Prev = self.last
+                        self.last = new_node
+                        self.dict[key] = [value, new_node]#, self.counter]
+                else:
+                    if temp_node.Next == None:                
+                        new_node = Node(value, key)
+                        temp_node.Prev.Next = new_node
+                        new_node.Prev = temp_node.Prev
+                        self.last = new_node
+                        self.dict[key] = [value, new_node]#, self.counter]
+                    else:
+                        temp_node.Prev.Next = temp_node.Next
+                        temp_node.Next.Prev = temp_node.Prev
+                        new_node = Node(value, key)
+                        self.last.Next = new_node
+                        new_node.Prev = self.last
+                        self.last = new_node
+                        self.dict[key] = [value, new_node]#, self.counter]
+            else:
+                if self.length == self.capacity:
+                    old_first = self.first
+                    if self.capacity == 1:
+                        new_node = Node(value, key)
+                        self.first = new_node
+                        self.last = new_node
+                        self.dict = {key: [value, new_node]} #, self.counter]}
+                        #self.least = new_node
+                    else:
+                        self.first = old_first.Next
+                        self.first.Prev = None
+                        self.dict.pop(old_first.key)
+                        new_node = Node(value, key)
+                        self.last.Next = new_node
+                        new_node.Prev = self.last
+                        self.last = new_node
+                        self.dict[key] = [value, new_node] #, self.counter]
+                    #return old_first.val
+                else:
+                    self.length += 1
+                    new_node = Node(value, key)
+                    self.last.Next = new_node
+                    new_node.Prev = self.last
+                    self.last = new_node
+                    self.dict[key] = [value, new_node] #, self.counter]
+                    
+
+
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
