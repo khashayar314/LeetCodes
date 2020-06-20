@@ -1,0 +1,24 @@
+class Solution(object):
+    def solveNQueens(self, n):
+        """
+        :type n: int
+        :rtype: List[List[str]]
+        """
+        output = []
+        places = []
+        row_num = 0
+        column_vals = set()
+        second_diag = set()
+        first_diag = set() 
+        self.n_loops(first_diag, second_diag, column_vals, row_num, n, places, output)
+        return output
+        
+        
+    def n_loops(self, first_diag, second_diag, column_vals, row_num, n, places, output):
+        if row_num >= n:
+            return self.draw(places, output)
+        for i in range(n):
+            if i in column_vals or row_num-i in first_diag or row_num+i in second_diag:
+                continue
+            
+            self.n_loops(first_diag.union({row_num-i}), second_diag.union({row_num+i}), column_vals.union({i}), row_num+1, n, places+[i], output)
