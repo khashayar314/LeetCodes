@@ -1,0 +1,95 @@
+class Solution(object):
+    def isNumber(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        validchars = ['0', '1', '2', '3', '4', '5', '6', '7', '8' , '9' , '+' , '-' , '.', 'e']
+        s = Solution.deletespace(self, s)
+        if len(s) == 0:
+            return False
+        for char in s:
+            if char not in validchars:
+                return False
+        if 'e' in s:
+            return Solution.expcheck(self, s)
+        return Solution.signcheck(self, s) and Solution.dotcheck(self, s)[0]
+            
+    
+    def expcheck(self, s):
+        before = True
+        letterE = False
+        base = ''
+        exp = ''
+        for i in range(len(s)):        
+            if before and s[ i ] != 'e':
+                base += s[i]
+            elif s[ i ] == 'e':
+                if letterE:
+                    print("extra letter e")
+                    return False
+                letterE = True
+                before = False
+            else:
+                exp += s[i]
+        if len(base) == 0 or len(exp) == 0:
+            return False
+        # checks if the signs of base and the exponent make sense
+        if Solution.signcheck(self, base) and Solution.signcheck(self, exp):
+            # checks if exponent is a number, but not a decimal
+            if Solution.dotcheck(self, exp, True)[0] and not Solution.dotcheck(self, exp, True)[1]:
+                # checks if base is a number
+                return Solution.dotcheck(self, base)[0]
+        return False
+             
+        
+    # assumes there is no e, no space
+    # gives an error if there is more than one decimal, or no numbers after decimal
+    def dotcheck(self, s, exponent = False):
+        integer = False
+        decimals = False
+        dot = False
+        for char in s:
+            if char == '.':
+                if dot:
+                    return [False]
+                dot = True
+            else:
+                if dot:
+                    #decpart += char
+                    decimals = True
+                elif ord(char) >= ord('0') and ord(char) <= ord('9'):
+                    integer = True
+                    
+        if dot and not decimals:
+            if exponent or not integer:
+                return [False]
+        
+        # if the number is valid, returns whether an integer or not
+        return [True, dot]
+        
+        
+    # checks if there is more than one +/- sign or not. need to have no 'e' or space here    
+    def signcheck(self, s):
+        if s == '+' or s == '-':
+            return False
+        for i in range(1, len(s)):
+            if s[i] == '+' or s[i] == '-':
+                return False
+        return True
+    
+    # deletes the spaces from start and end, if there are spaces in the middle, returns empty str
+    def deletespace(self, s):
+        t = ''
+        start = False
+        end = False
+        for char in s:
+            if char != ' ':
+                start = True
+                t += char
+                if end:
+                    return ''
+            elif char == ' ':
+                if start:
+                    end = True        
+        return t
