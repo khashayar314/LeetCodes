@@ -1,0 +1,52 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def maxPathSum(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        return Solution.helper(self, root)[0]
+        
+        
+    def other_helper(self, root):
+        if root == None:
+            return
+        left = [0, 0]
+        right = [0, 0] 
+        first_include = [ ]
+        if root.left != None:
+            left = Solution.other_helper(self, root.left)
+            first_include.append(left[0])
+        if root.right != None:
+            right = Solution.other_helper(self, root.right)
+            first_include.append(right[0])
+        second = max(left[1]+root.val, right[1]+root.val, root.val)
+        first_include.extend([second, left[1]+right[1]+root.val])
+        first = max(first_include)
+        
+        return [first, second]
+        
+    def helper(self, root):
+        if root.left == None and root.right == None:
+            return [root.val, root.val]
+        elif root.left == None and root.right != None: 
+            right = Solution.helper(self, root.right)
+            second = max(right[1]+root.val, root.val)
+            first = max(right[0], second)
+            return [first, second]
+        elif root.left != None and root.right == None:
+            left = Solution.helper(self, root.left)
+            second = max(left[1]+root.val, root.val)
+            first = max(left[0], second)
+            return [first, second]
+        else:
+            left = Solution.helper(self, root.left)
+            right = Solution.helper(self, root.right)
+            second = max(left[1]+root.val, right[1]+root.val, root.val)
+            first = max(left[0], right[0], second, left[1]+right[1]+root.val)
+            return [first, second]
