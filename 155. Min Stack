@@ -1,0 +1,81 @@
+class Node():
+    def __init__(self, x):
+        self.val = x
+        self.Next = None
+        self.Prev = None
+        self.prevmin = None
+
+
+class MinStack(object):
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.head = None
+        self.tail = None
+        self.smallest = None
+        
+
+    def push(self, x):
+        """
+        :type x: int
+        :rtype: None
+        """
+        new = Node(x)
+        if self.head == None:
+            self.head = new
+            self.tail = new
+            self.smallest = new
+        else:
+            new.Next = self.head
+            self.head.Prev = new
+            self.head = new
+            if new.val < self.smallest.val:
+                new.prevmin = self.smallest
+                self.smallest = new
+            
+ 
+    def pop(self):
+        """
+        :rtype: None
+        """
+        if self.head == None:
+            return
+        else:
+            nextone = self.head.Next
+            if nextone == None:
+                self.smallest = None
+                self.head = None
+                self.tail = None
+                return 
+            nextone.Prev = None
+            if self.head == self.smallest:
+                self.smallest = self.head.prevmin
+            self.head = nextone
+
+
+    def top(self):
+        """
+        :rtype: int
+        """
+        return self.head.val
+
+    def getMin(self):
+        """
+        :rtype: int
+        """
+        if self.smallest == None:
+            return None
+        else:
+            return self.smallest.val
+    
+        
+
+
+# Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(x)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
