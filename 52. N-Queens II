@@ -1,0 +1,24 @@
+class Solution(object):
+    def totalNQueens(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        row_num = 0
+        column_vals = set()
+        second_diag = set()
+        first_diag = set() 
+        return self.n_loops(first_diag, second_diag, column_vals, row_num, n)
+        
+        
+    def n_loops(self, first_diag, second_diag, column_vals, row_num, n):
+        counter = 0
+        if row_num >= n:
+            return 1 
+        for i in range(n):
+            if i in column_vals or row_num-i in first_diag or row_num+i in second_diag:
+                continue
+            #print("see", i, row_num, counter)
+            counter += self.n_loops(first_diag.union({row_num-i}), second_diag.union({row_num+i}), column_vals.union({i}), row_num+1, n)
+        
+        return counter
