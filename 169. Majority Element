@@ -1,0 +1,15 @@
+class Solution(object):
+    def majorityElement(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        half_length = len(nums)//2 
+        numsdict = {}
+        for number in nums:
+            if number in numsdict:
+                numsdict[number] += 1
+            else:
+                numsdict[number] = 1
+            if numsdict[number] > half_length:
+                return number
