@@ -1,0 +1,15 @@
+class Solution(object):
+    def singleNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        numsdict = {}
+        for number in nums:
+            if number in numsdict:
+                numsdict[number] = False
+            if number not in numsdict:
+                numsdict[number] = True
+        for number in numsdict:
+            if numsdict[number]:
+                return number
