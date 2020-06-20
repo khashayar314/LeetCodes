@@ -1,0 +1,20 @@
+class Solution(object):
+    def rangeBitwiseAnd(self, m, n):
+        """
+        :type m: int
+        :type n: int
+        :rtype: int
+        """
+        least = str(bin(m))
+        most = str(bin(n))
+        l = len(least)-2
+        L = len(most)-2
+        mystr = ''
+        answer = 0
+        for i in range(1, l+1):
+            new = 0
+            if least[-i] == most[-i] and least[-i] == '1':
+                if n-m <= 2 **(i-1):
+                    new = 1
+            answer += new * 2**(i-1)
+        return answer
