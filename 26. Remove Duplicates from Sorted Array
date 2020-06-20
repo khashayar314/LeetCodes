@@ -1,0 +1,20 @@
+class Solution(object):
+    def removeDuplicates(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        l = len(nums)
+        fastrunner = 0
+        slowrunner = 0
+        while fastrunner < l:
+            if fastrunner < l-1 and nums[fastrunner] != nums[fastrunner+1]:
+                nums[slowrunner] = nums[fastrunner]
+                fastrunner += 1
+                slowrunner += 1
+            elif fastrunner == l-1:
+                nums[slowrunner] = nums[fastrunner]
+                break
+            else:
+                fastrunner += 1
+        return slowrunner+1
