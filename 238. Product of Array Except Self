@@ -1,0 +1,19 @@
+class Solution(object):
+    def productExceptSelf(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        left = 1
+        right = 1
+        leftarr = [1]
+        rightarr = [1]
+        for i in range(1, len(nums)):
+            left *= nums[i-1]
+            leftarr.append(left)
+            right *= nums[-i]
+            rightarr.append(right)
+        output = []
+        for i in range(len(nums)):
+            output.append(leftarr[i]*rightarr[-i-1])
+        return output
