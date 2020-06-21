@@ -1,0 +1,22 @@
+class Solution(object):
+    def moveZeroes(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: None Do not return anything, modify nums in-place instead.
+        """
+        #counter = 0
+        fastrunner = 0
+        slowrunner = 0
+        while fastrunner < len(nums):
+            while fastrunner < len(nums) and nums[fastrunner] == 0:
+                #counter += 1
+                fastrunner += 1
+            if fastrunner >= len(nums):
+                break
+            nums[slowrunner] = nums[fastrunner]
+            slowrunner += 1
+            fastrunner += 1
+        for i in range(slowrunner , len(nums)):
+            nums[i] = 0
+        return nums
+                
