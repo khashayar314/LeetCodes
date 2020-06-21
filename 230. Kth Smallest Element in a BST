@@ -1,0 +1,68 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def kthSmallest(self, root, k):
+        """
+        :type root: TreeNode
+        :type k: int
+        :rtype: int
+        """
+        root.val = [root.val, None]
+        self.attach_parents(root)
+        
+        counter = 1
+        smallest = self.find_smallest(root)
+        while counter < k:
+            if smallest.right == None:
+                print("no child on right", smallest.val[0], counter)
+                parent = smallest.val[1]                
+                smallest = parent
+                print("afterwards", smallest.val[0])
+            else:
+                print("yes child on right", smallest.val[0], counter)
+                smallest = self.find_smallest(smallest.right)
+                print("afterwards", smallest.val[0])
+            counter += 1
+        return smallest.val[0]
+    
+    def attach_parents(self, node):
+        if node == None:
+            return
+        if node.left:
+            node.left.val = [node.left.val, node]
+            self.attach_parents(node.left)
+        if node.right:
+            node.right.val = [node.right.val, node]
+            self.attach_parents(node.right)
+            
+
+    def find_smallest(self, node):
+        if node == None:
+            return
+        if node.left == None:
+            return node
+        else:
+            return self.find_smallest(node.left)
+    
+      
+        
+        
+        
+    def SlowWorkingSolution(self, root, k):
+        arr = []
+        self.get_numbers(root, arr)
+        arr.sort()
+        return arr[k-1]
+        
+    def get_numbers(self, node, arr):
+        if node == None:
+            return
+        arr.append(node.val)
+        self.get_numbers(node.left, arr)
+        self.get_numbers(node.right, arr)
+
+        
