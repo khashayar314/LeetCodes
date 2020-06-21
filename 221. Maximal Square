@@ -1,0 +1,28 @@
+class Solution(object):
+    def maximalSquare(self, matrix):
+        """
+        :type matrix: List[List[str]]
+        :rtype: int
+        """
+        largest = 0
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                if i == 0 or j == 0 or int(matrix[i][j]) == 0:
+                    matrix[i][j] = int(matrix[i][j])
+                    if largest < matrix[i][j]:
+                        largest = matrix[i][j]
+                    continue
+                left = int(matrix[i-1][j]) 
+                top = int(matrix[i][j-1])
+                if left == top:
+                    if int(matrix[i-left][j-left]) == 0:
+                        matrix[i][j] = left
+                    else:
+                        matrix[i][j] = left+1
+                        if left >= largest:
+                            largest = left+1
+                            ind = [i,j]
+                else:
+                    matrix[i][j] = min(left, top)+1
+        #print(ind)
+        return largest*largest
