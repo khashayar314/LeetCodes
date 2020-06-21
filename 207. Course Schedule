@@ -1,0 +1,35 @@
+class Solution(object):
+    def canFinish(self, numCourses, prerequisites):
+        """
+        :type numCourses: int
+        :type prerequisites: List[List[int]]
+        :rtype: bool
+        """
+        courses_dict = {}
+        for i in range(numCourses):
+            courses_dict[i] = [0] #at first, i has no prerequisits
+        
+        for pair in prerequisites:
+            courses_dict[pair[0]].append(pair[1])
+            courses_dict[pair[1]][0] += 1 # pair[1] has a prerequisit
+            
+        counter = 0
+        for vertex in courses_dict:
+            if not courses_dict[vertex][0]:
+                counter += self.TakeVertexOut(courses_dict, vertex)
+                      
+        if counter < numCourses:
+            return False
+        return True
+                
+    def TakeVertexOut(self, courses_dict, vertex):
+        counter = 1
+        courses_dict[vertex][0] = -1
+        last = len(courses_dict[vertex])
+        for j in range(1, last):
+            nb = courses_dict[vertex][j]
+            courses_dict[nb][0] -= 1
+            if not courses_dict[nb][0]:
+                counter += self.TakeVertexOut(courses_dict, nb)
+        return counter       
+        
