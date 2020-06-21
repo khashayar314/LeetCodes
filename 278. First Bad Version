@@ -1,0 +1,27 @@
+# The isBadVersion API is already defined for you.
+# @param version, an integer
+# @return a bool
+# def isBadVersion(version):
+
+class Solution(object):
+    def firstBadVersion(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        first = 0
+        last = n
+        #last_found = True
+        while last-first > 1:
+            mid = first+(last-first)//2
+            #last_found = isBadVersion(mid):
+            if isBadVersion(mid):
+                last = mid
+            else:
+                first = mid
+        if isBadVersion(first):
+            return first
+        if isBadVersion(last):
+            return last
+        else:
+            return last+1
