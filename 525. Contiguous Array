@@ -1,0 +1,23 @@
+class Solution(object):
+    def findMaxLength(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        
+        numsdict = {0:-1}
+        total = 0
+        largest = 0
+        for i in range(len(nums)):
+            if nums[i] == 1:
+                total += 1
+            else:
+                total -= 1
+            if total in numsdict:
+                if i - numsdict[total] > largest:
+                    largest = i - numsdict[total]
+            else:
+                numsdict[total] = i
+        return largest        
+        
+  
