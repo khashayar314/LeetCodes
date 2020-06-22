@@ -1,0 +1,72 @@
+class Node():
+    def __init__(self, val):
+        self.val = val
+        self.prev = None
+        self.next = None
+
+class Queue():
+    def __init__(self, head, tail):
+        self.head = head
+        self.tail = tail
+    
+    def Enqueue(self, node):
+        if self.tail == None:
+            self.head = node
+            self.tail = node
+        else:
+            self.tail.next = node
+            node.prev = self.tail
+            self.tail = node
+    
+    def Dequeue(self):
+        if self.head == None:
+            return
+        elif self.head == self.tail:
+            temp = self.head
+            self.head = None
+            self.tail = None
+            return temp
+        else:
+            temp = self.head
+            self.head = self.head.next
+            if self.head != None:
+                self.head.prev = None
+            return temp
+            
+class Solution(object):
+    def floodFill(self, image, sr, sc, newColor):
+        """
+        :type image: List[List[int]]
+        :type sr: int
+        :type sc: int
+        :type newColor: int
+        :rtype: List[List[int]]
+        """
+        color = image[sr][sc]
+        if color == newColor:
+            return image
+        image[sr][sc] = newColor
+        node = Node([sr, sc])
+        my_queue = Queue(node, node)
+        while my_queue.head != None:
+            new_node = my_queue.Dequeue()
+            [r, c] = new_node.val
+            #color = image[r][c]
+            if r > 0 and image[r-1][c] == color:
+                image[r-1][c] = newColor
+                node = Node([r-1, c])
+                my_queue.Enqueue(node)
+            if r < len(image)-1 and image[r+1][c] == color:
+                image[r+1][c] = newColor
+                node = Node([r+1, c])
+                my_queue.Enqueue(node)        
+            if c > 0 and image[r][c-1] == color:
+                image[r][c-1] = newColor
+                node = Node([r, c-1])
+                my_queue.Enqueue(node)
+            if c < len(image[0])-1 and image[r][c+1] == color:
+                image[r][c+1] = newColor
+                node = Node([r, c+1])
+                my_queue.Enqueue(node)   
+        return image
+        
