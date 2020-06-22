@@ -1,0 +1,33 @@
+class Solution(object):
+    def frequencySort(self, s):
+        """
+        :type s: str
+        :rtype: str
+        """
+        rep_dict = {}
+        for char in s:
+            if char in rep_dict:
+                rep_dict[char] += 1
+            else:
+                rep_dict[char] = 1
+        
+        num_rep_dict = {}
+        num_rep_arr = []
+        for char in rep_dict:
+            num = rep_dict[char]
+            if num in num_rep_dict:
+                num_rep_dict[num].append(char)
+            else:
+                num_rep_dict[num] = [char]
+                num_rep_arr.append(num)
+                
+        num_rep_arr.sort(reverse = True)
+        answer = ""
+        for num in num_rep_arr:
+            for char in num_rep_dict[num]:
+                answer += char*num
+
+        return answer
+        
+        
+                
