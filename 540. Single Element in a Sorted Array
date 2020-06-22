@@ -1,0 +1,14 @@
+class Solution(object):
+    def singleNonDuplicate(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        nums_dict = {}
+        for number in nums:
+            if number in nums_dict:
+                nums_dict.pop(number)
+            else:
+                nums_dict[number] = 1
+        for number in nums_dict:
+            return number
