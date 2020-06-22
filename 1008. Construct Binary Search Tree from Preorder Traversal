@@ -1,0 +1,72 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution(object):
+    def bstFromPreorder(self, preorder):
+        """
+        :type preorder: List[int]
+        :rtype: TreeNode
+        """
+        if preorder == []:
+            return None
+        elif len(preorder) == 1:
+            return TreeNode(preorder[0])
+        root = TreeNode(preorder[0])
+        Solution.maketree(self, preorder, root, 0, len(preorder))
+        return root
+    
+        #nodearr = Solution.BFStree(self, root)
+        #answer = []
+        #for i in range(len(nodearr)):
+            #if nodearr[i] != None:
+                #answer.append(nodearr[i].val)
+            #elif i != len(nodearr) - 1:
+                #answer.append(None)
+        #return answer
+            
+    def maketree(self, preorder, parent, firstind, lastind):
+        if firstind >= lastind-1:
+            return
+        child = TreeNode(preorder[firstind+1])
+        if preorder[firstind+1] < preorder[firstind]:
+            parent.left = child
+            i = firstind + 1
+            foundrightchild = False
+            while i < lastind-1:
+                i += 1
+                if preorder[i] > preorder[firstind]:
+                    rightchild = TreeNode(preorder[i])
+                    parent.right = rightchild
+                    foundrightchild = True
+                    break
+            
+            if foundrightchild:
+                Solution.maketree(self, preorder, child, firstind+1, i)
+                Solution.maketree(self, preorder, rightchild, i, lastind)
+            else:
+                Solution.maketree(self, preorder, child, firstind+1, lastind)
+                
+        else:
+            parent.right = child
+            Solution.maketree(self, preorder, child, firstind+1, lastind)
+            
+    def BFStree(self, root):
+        nodearr = [root]
+        i = 0
+        length = 1
+        while i < length:
+            current = nodearr[i]
+            i += 1
+            if current == None or (current.left == None and current.right == None):
+                continue
+            nodearr.append(current.left)
+            nodearr.append(current.right)
+            length += 2
+        return nodearr
+            
+            
+                    
