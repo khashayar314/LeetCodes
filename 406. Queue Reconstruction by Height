@@ -1,0 +1,39 @@
+class Solution(object):
+    def reconstructQueue(self, people):
+        """
+        :type people: List[List[int]]
+        :rtype: List[List[int]]
+        """
+        people_copy = people
+        correct_queue = []
+        for i in range(len(people)):
+            new_term = self.find_first(people_copy)
+            [first, second] = new_term
+            temp = 0
+            for pair in correct_queue:
+                if pair[0] >= new_term[0]:
+                    temp += 1
+            
+            correct_queue.append([first, second+temp])
+        
+        return correct_queue
+        
+        
+    def find_first(self, people_copy):
+        smallest = float("inf")
+        answer = [0, 0]
+        for pair in people_copy:
+            if not pair[1]:
+                if smallest > pair[0]:
+                    smallest = pair[0] 
+                    answer = pair
+        found = False
+        for pair in people_copy:
+            if pair == answer and not found:
+                found = True
+                
+            elif pair[0] <= smallest:
+                pair[1] -= 1
+        people_copy.remove(answer)
+        return answer
+        
