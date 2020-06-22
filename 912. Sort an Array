@@ -1,0 +1,64 @@
+class Solution(object):
+    def sortArray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """        
+        if len( nums ) < 2:
+            return nums
+        start = Solution.median( self , nums )
+        smaller = []
+        larger = []
+        counter = 0
+        for number in nums:
+            if number > start:
+                larger.append( number)
+            elif number < start:
+                smaller.append( number )
+            else:
+                counter += 1
+        return Solution.sortArray( self, smaller ) + [ start ] * counter +  Solution.sortArray( self , larger ) 
+        
+        
+        
+    def median( self , nums ):
+        if len( nums ) < 3:
+            return nums[ 0 ]
+        first = nums[ 0 ]
+        last = nums[ len( nums ) - 1 ]
+        mid = nums[ int( len( nums ) / 2 ) ]
+        if ( mid <= first and first <= last) or ( mid >= first and first >= last ):
+            return first
+        elif ( first <= mid and mid <= last) or ( first >= mid and mid >= last ):
+            return mid
+        else:
+            return last
+    
+    def mergeSort( self , nums ):
+        if len( nums ) < 2:
+            return nums
+        mid = int ( len( nums ) / 2 )
+        arr1 = Solution.mergeSort( self , nums[ : mid ] ) 
+        arr2 = Solution.mergeSort( self, nums[ mid : ] )
+        return Solution.merge( self,  arr1 , arr2 )
+    
+    
+    
+    def merge( self , arr1 , arr2 ):
+        if arr1 == [] or arr2 == []:
+            return arr1 + arr2 
+        answer = [ ]
+        i = 0
+        j = 0
+        while i < len( arr1 ) and j < len( arr2 ) :
+            if arr1[ i ] < arr2[ j ]:
+                answer.append( arr1[ i ] )
+                i += 1
+            else:
+                answer.append( arr2[ j ] )
+                j += 1
+        if i >= len( arr1 ):
+            return answer + arr2[ j : ]
+        else:
+            return answer + arr1[ i : ]
+
