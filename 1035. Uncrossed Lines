@@ -1,0 +1,39 @@
+class Solution(object):
+    def maxUncrossedLines(self, A, B):
+        """
+        :type A: List[int]
+        :type B: List[int]
+        :rtype: int
+        """
+        answer = []
+        for i in range(len(A)):
+            answer.append([])
+            for j in range(len(B)):
+                if i == 0:
+                    if A[i] == B[j]:
+                        answer[i].append(1)
+                    else:
+                        prev = 0
+                        if j > 0:
+                            prev = answer[i][j-1]
+                        answer[i].append(prev)
+                elif j == 0:
+                    if A[i] == B[j]:
+                        answer[i].append(1)
+                    else:
+                        prev = 0
+                        if i > 0:
+                            prev = answer[i-1][j]
+                        answer[i].append(prev)
+                else:
+                    
+                    if A[i] == B[j]:
+                        prev = answer[i-1][j-1]
+                        answer[i].append(prev+1)
+                    else:
+                        prev = max(answer[i-1][j], answer[i][j-1])
+                        answer[i].append(prev)
+                        
+        return answer[-1][-1]    
+                        
+        
