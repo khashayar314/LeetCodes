@@ -1,0 +1,26 @@
+class Solution(object):
+    def canConstruct(self, ransomNote, magazine):
+        """
+        :type ransomNote: str
+        :type magazine: str
+        :rtype: bool
+        """
+        magazinedict = {}
+        for char in magazine:
+            if char in magazinedict:
+                magazinedict[char] += 1
+            else:
+                magazinedict[char] = 1
+        
+        ransomdict = {}
+        for char in ransomNote:
+            if char in ransomdict:
+                ransomdict[char] += 1
+            else:
+                ransomdict[char] = 1
+        
+        for char in ransomdict:
+            if char not in magazinedict or magazinedict[char] < ransomdict[char]:
+                return False
+        return True
+        
