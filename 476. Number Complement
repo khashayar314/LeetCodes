@@ -1,0 +1,12 @@
+class Solution(object):
+    def findComplement(self, num):
+        """
+        :type num: int
+        :rtype: int
+        """
+        num_copy = num
+        digits = 0
+        while num_copy > 0:
+            num_copy = num_copy//2
+            digits += 1
+        return 2**digits - num - 1
