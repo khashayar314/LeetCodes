@@ -1,0 +1,162 @@
+class Solution(object):
+    def longestDupSubstring(self, S):
+        """
+        :type S: str
+        :rtype: str
+        """
+        lower = 0
+        upper = len(S)
+        while upper-lower > 1:
+            mid = lower+(upper-lower)//2
+            if self.compare_equal_lengths(S, mid):
+                lower = mid
+            else:
+                upper = mid
+        
+        if self.compare_equal_lengths(S, upper):
+            return self.compare_equal_lengths(S, upper)
+            
+        elif self.compare_equal_lengths(S, lower):
+            return self.compare_equal_lengths(S, lower)
+        return ""
+        
+        
+    def compare_equal_lengths(self, S, length):
+        if length >= len(S):
+            return
+        if length <= 0:
+            return 
+        
+        p = 10000019 # some prime number
+        base = 26
+        d = 1
+        for j in range(length-1):
+            d = (d*base)%p
+        
+        prev = self.my_hasher(S[:length])
+        hash_nums = {prev:[0]}
+        for start in range(1, len(S)-length+1):
+            new_digit = ord(S[start+length-1])-ord('a')
+            old_digit = ord(S[start-1])-ord('a')
+            new_num = ((prev - old_digit*d)*base + new_digit)%p
+            if new_num in hash_nums:
+                for new_start in hash_nums[new_num]:
+                    if S[new_start:new_start+length] == S[start:start+length]:
+                        return S[start:start+length]
+                
+                hash_nums[new_num].append(start)
+                
+                
+            else:
+                hash_nums[new_num] = [start]
+            prev = new_num
+        
+     
+    def my_hasher(self, string):
+        p = 10000019 # some prime number
+        base = 26
+        num = 0 
+        for letter in string:
+            k = ord(letter)-ord('a')
+            num = (num*base+k)%p
+        return num
+        
+        
+        
+#####################################################        
+    def again_slow(self, S):    
+        lower = 0
+        upper = len(S)
+        while upper-lower > 1:
+            mid = lower+(upper-lower)//2
+            if self.search(S, mid):
+                lower = mid
+            else:
+                upper = mid
+        if self.search(S, upper):
+            return self.search(S, upper)
+        elif self.search(S, lower):
+            return self.search(S, lower)
+        else:
+            return ""
+            
+                      
+    def search(self, S, length):
+        if length >= len(S):
+            return 
+        if length <= 0:
+            return 
+        constant_length = {}
+        for start in range(len(S)-length+1):
+            if S[start:start+length] in constant_length:
+                answer = S[start:start+length]
+                return S[start:start+length]
+            constant_length[S[start:start+length]] = 1        
+        
+########################################        
+    def bottom_up_slow(self, S):
+        if len(S) < 1:
+            return
+        
+        repeated = False
+        repeated_str = {}
+        for i in range(len(S)):
+            if S[i] in repeated_str:
+                repeated_str[S[i]].append(i)
+                #repeated = True
+            else:
+                repeated_str[S[i]] = [i]
+        
+        repeated_str_copy = repeated_str.copy()
+        for term in repeated_str_copy:
+            self.helper(repeated_str, term, S)
+            
+        answer = ""
+        max_length = 0
+        for term in repeated_str:
+            if len(term) > max_length and len(repeated_str[term]) > 1:
+                answer = term
+                max_length = len(term)
+                
+        return answer
+            
+        
+    def helper(self, repeated_str, term, S):
+        if len(repeated_str[term]) < 2:
+            return False
+        
+        next_letters = {}
+        for ind in repeated_str[term]:
+            if ind+1 < len(S):
+                char = S[ind+1]
+                if char in next_letters:
+                    next_letters[char].append(ind+1)
+                else:
+                    next_letters[char] = [ind+1]
+        
+        found_longer = False
+        for char in next_letters:
+            if len(next_letters[char]) > 1:
+                if not found_longer:
+                    repeated_str.pop(term)
+                    found_longer = True
+                new_term = term+char
+                repeated_str[new_term] = next_letters[char]
+                self.helper(repeated_str, new_term, S)
+        return found_longer
+                
+                
+########################################                    
+    def slow(self, S):
+        answer = ""
+        #for length in range(len(S)-1, 0, -1):
+        for length in range(1, len(S)):
+            constant_length = {}
+            for start in range(len(S)-length+1):
+                if S[start:start+length] in constant_length:
+                    answer = S[start:start+length]
+                    break
+                    #return S[start:start+length]
+                constant_length[S[start:start+length]] = 1 
+        return answer
+            
