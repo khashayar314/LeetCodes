@@ -1,0 +1,68 @@
+class Solution(object):
+    def removeKdigits(self, num, k):
+        """
+        :type num: str
+        :type k: int
+        :rtype: str
+        """
+        digits = []
+        for i in range(len(num)):
+            digits.append(int(num[i]))
+        answer = []
+        last_digit = 0
+        remaining = k
+        while remaining > 0 and last_digit < len(digits):
+            digit_slice = digits[last_digit: last_digit+remaining+1]
+            number = min(digit_slice)
+            new_ind = digit_slice.index(number)+last_digit
+            answer.append(number)
+            remaining = remaining - new_ind + last_digit
+            last_digit = new_ind+1
+        
+        if last_digit < len(digits):
+            answer.extend(digits[last_digit: ])
+
+            number = 0
+        length = min(len(answer), len(digits)-k)
+        for i in range(length):
+            number *= 10
+            number += answer[i]
+        return str(number)
+        
+        
+        
+        
+    def SlowMethod(self, num, k):    
+        #digits = self.FindDigits(num)
+        digits = self.RevStrInt(num)
+        answer = []
+        for i in range(len(digits)):
+            answer.append([])
+            for j in range(k+1):
+                if j == 0:
+                    if i == 0:
+                        number = digits[0]                    
+                    else:
+                        number = digits[i]* 10**i + answer[i-1][0]
+                elif i == 0:
+                    number = 0
+                else:
+                    first_number = digits[i]* 10**(i-j)+ answer[i-1][j]
+                    second_number = answer[i-1][j-1]
+                    number = min(first_number, second_number)
+                answer[i].append(number)
+                
+        return str(answer[-1][-1])
+    
+    def RevStrInt(self, num):
+        answer = []
+        for i in range(len(num)):
+            answer.append(int(num[-i-1]))
+        return answer
+        
+    def FindDigits(self, num):
+        answer = []
+        while num > 0:
+            answer.append(num%10)
+            num = num//10
+        return answer
