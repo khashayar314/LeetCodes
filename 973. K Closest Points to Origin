@@ -1,0 +1,25 @@
+class Solution(object):
+    def kClosest(self, points, K):
+        """
+        :type points: List[List[int]]
+        :type K: int
+        :rtype: List[List[int]]
+        """
+        distances = []
+        k_smallest = []
+        
+        
+        for i in range(len(points)):
+            distance = points[i][0]**2 + points[i][1]**2
+            #print("tincan", distance, i)
+            distances.append(distance)
+            
+        distances.sort()
+        #print(distances)
+        thresholde = distances[K-1]
+        answer = []
+        for pair in points:
+            if pair[0]**2 + pair[1]**2 <= thresholde:
+                answer.append(pair)
+                
+        return answer
