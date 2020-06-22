@@ -1,0 +1,24 @@
+class Solution(object):
+    def countSquares(self, matrix):
+        """
+        :type matrix: List[List[int]]
+        :rtype: int
+        """
+        total = 0
+        for i in range(len(matrix)):
+            for j in range(len(matrix[0])):
+                if matrix[i][j] == 0 or i == 0 or j == 0:
+                    total += matrix[i][j]
+                    continue
+                if matrix[i-1][j] == matrix[i][j-1] and matrix[i-1][j]:
+                    side_length = matrix[i-1][j]
+                    if matrix[i-side_length][j-side_length]:
+                        matrix[i][j] = side_length+1
+                    else:
+                        matrix[i][j] = side_length
+                else:
+                    side_length = min(matrix[i-1][j], matrix[i][j-1])
+                    matrix[i][j] = side_length+1
+                total += matrix[i][j]
+        
+        return total
