@@ -1,0 +1,41 @@
+class Solution(object):
+    def possibleBipartition(self, N, dislikes):
+        """
+        :type N: int
+        :type dislikes: List[List[int]]
+        :rtype: bool
+        """
+        nbs_dict = {}
+        for i in range(1, N+1):
+            nbs_dict[i] = [0] # the first term is the color, 0 means no color.
+            
+        for edge in dislikes:
+            [h, t] = edge
+            nbs_dict[h].append(t)
+            nbs_dict[t].append(h)
+
+    
+        for vertex in nbs_dict:
+            if not nbs_dict[vertex][0]: # if vertex has color 0, i.e. has no color
+                if not self.DFSColor(vertex, nbs_dict):
+                    return False
+        #print(nbs_dict)
+        return True
+                    
+                
+    def DFSColor(self, vertex, nbs_dict, color = 1):
+        nbs_dict[vertex][0] = color
+        other_color = 3-color
+        answer = True
+        for i in range(1, len(nbs_dict[vertex])):
+            nb = nbs_dict[vertex][i]
+            if nbs_dict[nb][0] == color:
+                return False
+            elif not nbs_dict[nb][0]:
+                answer &= self.DFSColor(nb, nbs_dict, other_color)
+            
+        return answer
+        
+        
+        
+            
