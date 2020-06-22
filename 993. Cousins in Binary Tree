@@ -1,0 +1,92 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class DNode():
+    def __init__(self, val, depth = None):
+        self.val = val
+        self.depth = depth
+        self.next = None
+        self.prev = None
+
+class Queue():
+    def __init__(self, head, tail):
+        self.head = head
+        self.tail = tail
+    
+    def Enqueue(self, dnode):
+        dnode.prev = self.tail
+        if self.tail != None:
+            self.tail.next = dnode
+        else:
+            self.head = dnode
+        self.tail = dnode
+        
+    def Dequeue(self):
+        answer = self.head
+        self.head = self.head.next
+        if self.head != None:
+            self.head.prev = None
+        else:
+            self.tail = None
+        return answer
+    
+class Solution(object):
+    def isCousins(self, root, x, y):
+        """
+        :type root: TreeNode
+        :type x: int
+        :type y: int
+        :rtype: bool
+        """
+        
+        
+        
+    #def triedBFS(self, root, x, y):    
+        head = DNode(root, 0)
+        queue = Queue(head, head)
+        
+        found_x = False
+        found_y = False
+        
+        while queue.head != None:
+            node = queue.Dequeue()
+            [tree_node, depth] = [node.val, node.depth]
+            if tree_node.left != None:
+                if tree_node.left.val == x:
+                    
+                    found_x = True
+                    depth_x = depth+1
+                    if found_y:
+                        return depth_x == depth_y
+                elif tree_node.left.val == y:
+                    found_y = True
+                    depth_y = depth+1
+                    if found_x:
+                        return depth_x == depth_y
+                new_node = DNode(tree_node.left, depth+1)
+                queue.Enqueue(new_node)
+                
+            if tree_node.right != None:
+                if tree_node.right.val == x:
+                    found_x = True
+                    depth_x = depth+1
+                    if found_y:
+                        if tree_node.left != None and tree_node.left.val == y:
+                            return False
+                        return depth_x == depth_y
+                if tree_node.right.val == y:
+                    found_y = True
+                    depth_y = depth+1
+                    if found_x:
+                        if tree_node.left != None and tree_node.left.val == x:
+                            return False
+                        return depth_x == depth_y
+                    
+                new_node = DNode(tree_node.right, depth+1)
+                queue.Enqueue(new_node)
+            
+        
