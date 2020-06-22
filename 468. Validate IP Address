@@ -1,0 +1,84 @@
+class Solution(object):
+    def validIPAddress(self, IP):
+        """
+        :type IP: str
+        :rtype: str
+        """
+        if len(IP) >= 40:
+            return 'Neither'
+        if self.ipv6divideblock(IP):
+            return 'IPv6'
+        if self.ipv4divideblock(IP):
+            return 'IPv4'
+        return 'Neither'
+        
+        
+        
+        
+    def ipv4divideblock(self, IP):
+        #blocks = []
+        num_of_blocks = 1
+        i = 0
+        current = ''
+        while i < len(IP):
+            if IP[i] == '.':
+                #blocks.append(current)
+                num_of_blocks += 1
+                if not self.ipv4block(current):
+                    return False
+                current = ''
+            else:
+                current += IP[i]
+            i += 1
+            
+        if num_of_blocks == 4 and self.ipv4block(current):
+            return True
+        return False
+        
+    def ipv6divideblock(self, IP):
+        #blocks = []
+        num_of_blocks = 1
+        i = 0
+        current = ''
+        while i < len(IP):
+            if IP[i] == ':':
+                #blocks.append(current)
+                num_of_blocks += 1
+                if not self.ipv6block(current):
+                    return False
+                current = ''
+            else:
+                current += IP[i]
+            i += 1
+            
+        
+        if num_of_blocks == 8 and self.ipv6block(current):
+            return True
+        return False        
+        
+        
+    def ipv6block(self, block):
+        if len(block) == 0 or len(block) > 4:
+            return False
+        valid_chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',\
+                       'a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C', 'D', 'E', 'F']
+        for char in block:
+            if char not in valid_chars:
+                return False
+        
+        return True
+            
+        
+    
+    def ipv4block(self, block):
+        if len(block) == 0 or (block[0] == '0' and len(block) > 1):
+            return False 
+        valid_chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        for char in block:
+            if char not in valid_chars:
+                return False
+        
+        if int(block) > 255:
+            return False
+        return True
+        
