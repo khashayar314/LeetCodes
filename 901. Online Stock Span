@@ -1,0 +1,26 @@
+class StockSpanner(object):
+
+    def __init__(self):
+        self.price_history = []
+        self.span = []
+
+    def next(self, price):
+        """
+        :type price: int
+        :rtype: int
+        """
+        i = 1
+        while i <= len(self.price_history):
+            if self.price_history[-i] > price:
+                break
+            else:
+                i += self.span[-i]
+        self.span.append(i)
+        self.price_history.append(price)
+        return i
+        
+
+
+# Your StockSpanner object will be instantiated and called as such:
+# obj = StockSpanner()
+# param_1 = obj.next(price)
