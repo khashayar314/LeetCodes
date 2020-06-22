@@ -1,0 +1,39 @@
+class Solution(object):
+
+    def __init__(self, w):
+        """
+        :type w: List[int]
+        """
+        self.length = len(w)
+        self.weights = w
+        self.total = []
+        total = 0
+        for weight in self.weights:
+            total += weight
+            self.total.append(total)
+        
+
+    def pickIndex(self):
+        """
+        :rtype: int
+        """
+        number = random.randrange(1, self.total[-1]+1)
+        start = 0
+        end = self.length
+        while end-start > 1:
+            mid = start+(end-start)//2
+            if self.total[mid] > number:
+                end = mid
+            elif self.total[mid] < number:
+                start = mid
+            else:
+                return mid
+        if number <= self.total[start] or end >= self.length:
+            return start
+        return end
+        
+
+
+# Your Solution object will be instantiated and called as such:
+# obj = Solution(w)
+# param_1 = obj.pickIndex()
