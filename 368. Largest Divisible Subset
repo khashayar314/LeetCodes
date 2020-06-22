@@ -1,0 +1,56 @@
+class Solution(object):
+    def largestDivisibleSubset(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        if len(nums) == 0:
+            return []
+        graph = {}
+        for i in nums:
+            if i not in graph:
+                self.find_children(nums, graph, i)
+        
+        lengths_dict = {}
+        longest = 0
+        root = None
+        for i in nums:
+            if i not in lengths_dict:
+                self.find_length(graph, lengths_dict, i)
+                if lengths_dict[i][0] > longest:
+                    longest = lengths_dict[i][0]
+                    root = i
+        answer = [root]
+        current = root
+        while len(graph[current]) > 0:
+            current = lengths_dict[current][1]
+            answer.append(current)
+        return answer
+    
+    def find_length(self, graph, lengths_dict, number):
+        if len(graph[number]) == 0:
+            lengths_dict[number] = [1, None]
+            return
+        
+        longest = 0
+        child = None
+        for i in graph[number]:
+            if i not in lengths_dict:
+                self.find_length(graph, lengths_dict, i)
+            if lengths_dict[i][0] > longest:
+                longest = lengths_dict[i][0]
+                child = i
+                
+        lengths_dict[number] = [longest+1, child]
+        
+        
+    def find_children(self, nums, graph, number):
+        graph[number] = []
+        for j in nums:
+            if number % j == 0 and number > j:
+                graph[number].append(j)
+        for j in graph[number]:
+            if j not in graph:
+                self.find_children(graph[number], graph, j)
+                
+                
