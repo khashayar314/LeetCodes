@@ -1,0 +1,142 @@
+class Solution(object):
+    def lastStoneWeight(self, stones):
+        """
+        :type stones: List[int]
+        :rtype: int
+        """
+        #Solution.heapsort(self, stones)
+        if len(stones) == 1:
+            return stones[0]
+        elif len(stones) == 2:
+            return abs(stones[1]-stones[0])
+        
+        Solution.buildmaxheap(self, stones)
+        zeros = 0
+        while zeros < len(stones)-1:
+            zeros += Solution.smashmaxstones(self, stones, len(stones))
+            #if zeros > 1:
+                #return [zeros, stones]
+        if zeros == len(stones):
+            return 0
+        else:
+            return stones[0]
+            
+    def smashmaxstones(self, maxheap, last):
+        largest = maxheap[0]
+        if maxheap[2] > maxheap[1]:
+            second = maxheap[2]
+            ind = 2
+        else:
+            second = maxheap[1]
+            ind = 1
+        diff = largest - second
+        maxheap[0] = diff
+        i = 0
+        while 2*i+2 <= last:
+            j = Solution.heapify(self, maxheap, i, last)
+            if j == i:
+                break
+            else:
+                i = j
+        if second == maxheap[0]:
+            i = 0
+        else:
+            i = ind
+        maxheap[i] = 0
+        #print("hey", i, maxheap)
+        #return 1
+        ##i = 0
+        while 2*i+2 <= last:
+            j = Solution.heapify(self, maxheap, i, last)
+            if j == i:
+                break
+            else:
+                i = j
+        if diff == 0:
+            return 2
+        else:
+            return 1
+   
+            
+            
+ ################################################################################       
+        
+    def heapsort(self, arr):
+        Solution.buildmaxheap(self, arr)
+        last = len(arr)
+        while last > 1:
+            last -= 1
+            largest = arr[0]
+            arr[0] = arr[last]
+            arr[last] = largest
+            i = 0
+            while 2*i+2 <= last:
+                j = Solution.heapify(self, arr, i, last)
+                if j == i:
+                    break
+                else:
+                    i = j                
+        
+        
+        
+    def buildmaxheap(self, arr):
+        start = len(arr)//2 - 1
+        last = len(arr)
+        while start >= 0:
+            i = start
+            while 2*i+2 <= last:
+                j = Solution.heapify(self, arr, i, last)
+                if j == i:
+                    break
+                else:
+                    i = j
+            start -= 1
+            
+            
+    def heapify(self, arr, i, last):
+        swap = i
+        if last == 2*i+2:
+            if arr[2*i+1] > arr[i]:
+                swap =2*i+1 
+        elif last > 2*i+2:
+            if max(arr[2*i+1], arr[2*i+2]) >= arr[i]:
+                if arr[2*i+2] >= arr[2*i+1]:
+                    swap = 2*i+2
+                else:
+                    swap = 2*i+1
+        if swap > i:
+            temp      = arr[swap]
+            arr[swap] = arr[i]
+            arr[i]    = temp
+        return swap
+            #return Solution.heapify(self, arr, swap, last)
+        #else:
+            #return arr
+###############################################################        
+    # this is a simple o(n^2) algorithm that suprisingly works pretty well.(better than 85 percent.)
+    def simpleapproach(self, stones):
+        while len(stones) > 1:
+            stones = Solution.smashtwomax(self, stones)
+        if stones == []:
+            return 0
+        return stones[0]
+            
+    def smashtwomax(self, stones):
+        if len(stones) < 2:
+            return stones
+        largest = max(stones)
+        M = stones.index(largest)
+        second = float("-inf")
+        m = len(stones)
+        for i in range(len(stones)):
+            if stones[i] > second and i != M:
+                second = stones[i]
+                m = i
+        answer = []
+        if second != largest:
+            answer.append(largest-second)
+        for i in range(len(stones)):
+            if i not in [m, M]:
+                answer.append(stones[i])
+        return answer
+            
