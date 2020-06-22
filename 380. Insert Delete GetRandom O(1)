@@ -1,0 +1,68 @@
+import random   
+        
+class RandomizedSet(object):
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.numbers = {}
+        self.reverse_numbers = {}
+        self.deleted_inds = []
+        self.last_ind = 0
+        #self.length = 0
+        
+    def insert(self, val):
+        """
+        Inserts a value to the set. Returns true if the set did not already contain the specified element.
+        :type val: int
+        :rtype: bool
+        """
+        if val in self.numbers:
+            return False
+        if len(self.deleted_inds):
+            ind = self.deleted_inds[-1]
+            self.deleted_inds.pop()
+        else:
+            ind = self.last_ind
+            self.last_ind += 1
+        self.numbers[val] = ind
+        self.reverse_numbers[ind] = val
+        return True
+
+                                        
+                                        
+    def remove(self, val):
+        """
+        Removes a value from the set. Returns true if the set contained the specified element.
+        :type val: int
+        :rtype: bool
+        """
+        if val not in self.numbers:
+            return False
+        ind = self.numbers[val]
+        self.deleted_inds.append(ind)
+        self.numbers.pop(val)
+        self.reverse_numbers.pop(ind)
+        return True
+    
+
+    def getRandom(self):
+        """
+        Get a random element from the set.
+        :rtype: int
+        """
+
+        ind = random.randint(0, self.last_ind-1)
+        while ind not in self.reverse_numbers:
+            ind = random.randint(0, self.last_ind-1)
+        return self.reverse_numbers[ind]
+        
+        
+
+
+# Your RandomizedSet object will be instantiated and called as such:
+# obj = RandomizedSet()
+# param_1 = obj.insert(val)
+# param_2 = obj.remove(val)
+# param_3 = obj.getRandom()
