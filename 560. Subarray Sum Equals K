@@ -1,0 +1,40 @@
+class Solution(object):
+    def subarraySum(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        total = 0
+        total_dict = {}
+        for i in range(len(nums)):
+            total += nums[i]
+            if total in total_dict:
+                total_dict[total].append(i)
+            else:
+                total_dict[total] = [i]
+        #print(total_dict)
+        
+        answer = 0
+        if k in total_dict:
+            answer += len(total_dict[k])
+        for total in total_dict:
+            if total+k in total_dict:
+                answer += Solution.helper(self, total_dict[total], total_dict[total+k])    
+        
+        return answer
+    
+    def helper(self, first_arr, second_arr):
+        i = 0
+        j = 0
+        answer = 0
+        n = len(first_arr)
+        m = len(second_arr)
+        while i < n and j < m:
+            if first_arr[i] < second_arr[j]:
+                answer += (m-j)
+                i += 1
+            else:
+                j += 1
+        return answer
+            
