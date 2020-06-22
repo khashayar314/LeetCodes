@@ -1,0 +1,31 @@
+class Solution(object):
+    def findJudge(self, N, trust):
+        """
+        :type N: int
+        :type trust: List[List[int]]
+        :rtype: int
+        """
+        if trust == []:
+            if N == 1:
+                return 1
+            else:
+                return -1
+        vertex_dict = {}
+        for pair in trust:
+            if pair[0] in vertex_dict:
+                vertex_dict[pair[0]].append(pair[1])
+            else:
+                vertex_dict[pair[0]] = [pair[1]]
+            if pair[1] not in vertex_dict:
+                vertex_dict[pair[1]] = []
+                
+        for i in range(N):
+            if vertex_dict[i+1] == []:
+                for v in vertex_dict:
+                    if v != i+1 and i+1 not in vertex_dict[v]:
+                        return -1
+                return i+1
+        return -1
+    
+            
+        
