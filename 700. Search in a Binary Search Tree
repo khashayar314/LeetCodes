@@ -1,0 +1,30 @@
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def searchBST(self, root, val):
+        """
+        :type root: TreeNode
+        :type val: int
+        :rtype: TreeNode
+        """
+
+            
+        return self.helper(root, val)
+        
+        
+    def helper(self, node, val):
+        if node == None:
+            return None
+        if node.val == val:
+            return node
+        left = self.helper(node.left, val) 
+        right = self.helper(node.right, val)
+        if left != None:
+            return left
+        if right != None:
+            return right
+            
