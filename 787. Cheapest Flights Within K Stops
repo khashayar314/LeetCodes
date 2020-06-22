@@ -1,0 +1,56 @@
+class Solution(object):
+    def findCheapestPrice(self, n, flights, src, dst, K):
+        """
+        :type n: int
+        :type flights: List[List[int]]
+        :type src: int
+        :type dst: int
+        :type K: int
+        :rtype: int
+        """
+        
+    #def slow(self, n, flights, src, dst, K):
+        graph = {}
+        weights = {}
+        for triple in flights:
+            if triple[0] not in graph:
+                graph[triple[0]] = [-1]
+                weights[triple[0]] = [None]
+            if triple[1] not in graph:
+                graph[triple[1]] = [-1]
+                weights[triple[1]] = [None]    
+            graph[triple[0]].append(triple[1])
+            weights[triple[0]].append(triple[2])
+         
+        graph[src][0] = -2
+        curr_cost = 0
+        stops = -1
+        least_cost = float("inf")
+        answer = self.path_maker(src, curr_cost, stops, K, dst, graph, weights, least_cost)
+        if answer == float("inf"):
+            return -1
+        return answer
+        
+    def path_maker(self, node, curr_cost, stops, max_stops, destination, graph, weights, least_cost):
+        if curr_cost > least_cost:
+            return float("inf")
+        graph[node][0] = -2
+        if stops > max_stops:
+            return float("inf")
+
+        
+        if node == destination:
+            return curr_cost
+        
+        for i in range(1, len(graph[node])):
+            new_node = graph[node][i]
+            if graph[new_node][0] == -2:
+                continue
+            graph[new_node][0] = -2
+            new_cost = self.path_maker(new_node, curr_cost+weights[node][i], stops+1, max_stops, destination, graph, weights, least_cost)
+            least_cost = min(new_cost, least_cost)
+            graph[new_node][0] = -1
+                
+        return least_cost
+        
+        
