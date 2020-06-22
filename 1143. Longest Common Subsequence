@@ -1,0 +1,27 @@
+class Solution(object):
+    def longestCommonSubsequence(self, text1, text2):
+        """
+        :type text1: str
+        :type text2: str
+        :rtype: int
+        """
+        length = []
+        for i in range(len(text1)):
+            length.append([])
+            for j in range(len(text2)):
+                
+                if text2[j] == text1[i]:
+                    if i == 0 or j == 0:
+                        length[i].append(1)
+                    else:   
+                        length[i].append(1+length[i-1][j-1])
+                else:
+                    if i == 0 and j == 0:
+                        length[i].append(0)
+                    elif i == 0:
+                        length[i].append(length[i][j-1])
+                    elif j == 0:
+                        length[i].append(length[i-1][j])
+                    else:
+                        length[i].append(max(length[i-1][j], length[i][j-1]))
+        return length[-1][-1]1143. 
