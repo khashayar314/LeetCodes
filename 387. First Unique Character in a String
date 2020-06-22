@@ -1,0 +1,24 @@
+class Solution(object):
+    def firstUniqChar(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        counter = 0
+        not_repeated = {}
+        length = len(s)
+        for char in s:
+            if char in not_repeated:
+                not_repeated[char] = length+1
+            else:
+                not_repeated[char] = counter
+            counter += 1
+        
+        answer = length+1
+        for char in not_repeated:
+            if not_repeated[char] < answer:
+                answer = not_repeated[char]
+        if answer == length+1:
+            return -1
+        else:
+            return answer
