@@ -1,0 +1,32 @@
+class Solution(object):
+    def singleNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        most_neg = 0
+        for number in nums:
+            if number < most_neg:
+                most_neg = number
+        for i in range(len(nums)):
+            nums[i] -= most_neg
+        
+        base3 = []
+        non_zero = True
+        while non_zero:
+            total = 0
+            non_zero = False
+            for i in range(len(nums)):
+                if nums[i] != 0:
+                    non_zero = True
+                total = (total+nums[i])%3
+                nums[i] = nums[i]//3
+            
+            base3.append(total)
+        
+        answer = 0
+        for i in range(len(base3)):
+            answer *= 3
+            answer += base3[-i-1]
+            
+        return answer+most_neg
