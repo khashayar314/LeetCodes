@@ -1,0 +1,38 @@
+class Solution(object):
+    def numSquares(self, n):
+        """
+        :type n: int
+        :rtype: int
+        """
+        if int(n**(0.5))**2 == n:
+            return 1
+        n_copy = n
+        
+        factor = 2
+        prime_factors = []
+        exponents = []
+        while n > 1 and factor <= n:
+            if n % factor == 0:
+                prime_factors.append(factor)
+                exponent = 0
+                while n % factor == 0:
+                    n /= factor
+                    exponent += 1
+                exponents.append(exponent)
+            factor += 1
+        
+        euler_sum_of_two_squares = True
+        for factor, exponent in zip(prime_factors, exponents):
+            if factor % 4 == 3 and exponent % 2 == 1:
+                euler_sum_of_two_squares = False
+                break
+        if euler_sum_of_two_squares:
+            return 2
+        
+        if prime_factors[0] == 2:
+            n_copy /= (4**(exponents[0]//2))
+        if n_copy % 8 == 7: # Legendre's three-square theorem
+            return 4
+        else:
+            return 3
+            
