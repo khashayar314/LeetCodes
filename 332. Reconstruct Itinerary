@@ -1,0 +1,29 @@
+class Solution(object):
+    def findItinerary(self, tickets):
+        """
+        :type tickets: List[List[str]]
+        :rtype: List[str]
+        """ 
+
+        graph = {}
+        for pair in tickets:
+            if pair[0] not in graph:
+                graph[pair[0]] = []
+            if pair[1] not in graph:
+                graph[pair[1]] = []
+            graph[pair[0]].append(pair[1])
+            
+        for node in graph:
+            graph[node].sort(reverse = True)
+            
+        stack = ["JFK"]
+        answer = []
+        while stack:
+            top_term = stack[-1]
+            if graph[top_term] != []:
+                stack.append(graph[top_term].pop())
+            else:
+                answer.append(top_term)
+                stack.pop()
+        return answer[::-1]
+            
