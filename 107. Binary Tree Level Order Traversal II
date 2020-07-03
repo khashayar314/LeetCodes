@@ -1,0 +1,83 @@
+class Node():
+    def __init__(self, val):
+        self.val = val
+        self.prev = None
+        self.next = None
+
+class Queue():
+    def __init__(self, head, tail):
+        self.head = head
+        self.tail = tail
+        
+    def Enqueue(self, node):
+        if self.tail:
+            self.tail.next = node
+            node.prev = self.tail
+            self.tail = node
+        else:
+            self.head = node
+            self.tail = node
+        
+    def Dequeue(self):
+        if self.head:
+            temp = self.head
+            if self.head.next:
+                self.head = self.head.next
+                self.head.prev = None
+
+            else:
+                self.head = None
+                self.tail = None
+            return temp
+        else:
+            return 
+        
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution(object):
+    def levelOrderBottom(self, root):
+        """
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """
+        if not root:
+            return []
+        answer = self.BFSWithDepth(root)
+                
+        return answer[::-1]
+        
+    def BFSWithDepth(self, root):
+        prev_depth = 0
+        node = Node([root, prev_depth])
+        queue = Queue(node, node)
+        answer = []
+        sub_arr = []
+        
+        while queue.head:
+            [tree_node, depth] = queue.Dequeue().val
+            new_term = tree_node.val
+            if depth > prev_depth:
+                prev_depth = depth
+                answer.append(sub_arr)
+                sub_arr = [new_term]
+            else:
+                sub_arr.append(new_term)
+
+            if tree_node.left:
+                new_node = Node([tree_node.left, depth+1])
+                queue.Enqueue(new_node)
+            if tree_node.right:
+                new_node = Node([tree_node.right, depth+1])
+                queue.Enqueue(new_node)
+
+        
+        answer.append(sub_arr)
+        return answer
+            
+        
+        
