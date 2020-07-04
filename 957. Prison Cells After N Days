@@ -1,0 +1,33 @@
+class Solution(object):
+    def prisonAfterNDays(self, cells, N):
+        """
+        :type cells: List[int]
+        :type N: int
+        :rtype: List[int]
+        """
+        prev_cells = cells
+        new_cells = cells
+        all_steps = {tuple(cells):0}
+        i = 0
+        while i < N:
+            new_cells = [0]*8
+            for j in range(1, 7):
+                new_cells[j] = int(not(prev_cells[j-1]^prev_cells[j+1]))
+            
+            new_cells = tuple(new_cells)
+            i += 1
+
+            if new_cells in all_steps:
+                first_repeat = all_steps[new_cells]
+                break
+            else:
+                all_steps[new_cells] = i
+                prev_cells = new_cells
+                
+        if i == N: 
+            return new_cells
+        k = (N-first_repeat)%(i-first_repeat) + first_repeat
+        for term in all_steps:
+            if all_steps[term] == k:
+                return term
+                
