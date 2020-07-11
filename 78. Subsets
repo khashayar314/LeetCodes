@@ -1,0 +1,17 @@
+class Solution(object):
+    def subsets(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+    
+        if len(nums) < 1:
+            return [[]]
+        last = nums[-1]
+        prev_subsets = self.subsets(nums[:-1])
+        answer = []
+        for subset in prev_subsets:
+            answer.append(subset)
+            new_subset = subset+[last]
+            answer.append(new_subset)
+        return answer
